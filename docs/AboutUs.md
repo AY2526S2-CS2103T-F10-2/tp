@@ -26,7 +26,8 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/dylan-liew)]
 [[portfolio](team/dylan-liew.md)]
 
-* Role: Integration
+* Role: Developer
+* Responsibilities: Integration
 
 ### Xu Zihao
 

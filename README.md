@@ -8,7 +8,7 @@
   * Managing large student cohorts of 500+ students and tutor teams
   * Tracking student and tutor contact details, tutorial groups, and progress
 * The project is a desktop application used for managing course logistics via a fast, keyboard-driven CLI/GUI hybrid interface.
-  * It is **written in OOP fashion**. 
+  * It is **written in OOP fashion**.
   * It comes with a **reasonable level of user and developer documentation**.
   *  It is designed specifically for a time-pressured, keyboard-first user who prefers batch operations and CLI efficiency.
 * For the detailed documentation of this project, see the **[CS2103T Course Manager Product Website](https://ay2526s2-cs2103t-f10-2.github.io/tp/)**.

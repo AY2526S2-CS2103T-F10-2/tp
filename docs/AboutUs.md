@@ -33,7 +33,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/xzhhhhhh.png" width="200px">
 
-[[github](http://github.com/xzhhhhhh)] 
+[[github](http://github.com/xzhhhhhh)]
 [[portfolio](team/xzhhhhhh.md)]
 
 * Role: Developer

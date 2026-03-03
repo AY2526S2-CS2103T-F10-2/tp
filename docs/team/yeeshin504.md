@@ -9,16 +9,16 @@ AddressBook - Level 3 is a desktop address book application used for teaching So
 
 Given below are my contributions to the project.
 
-* **New Feature**: 
-  * What it does: 
-  * Justification: 
-  * Highlights: 
-  * Credits: 
+* **New Feature**:
+  * What it does:
+  * Justification:
+  * Highlights:
+  * Credits:
 
 * **Code contributed**: [RepoSense link]()
 
 * **Project management**:
-  * Managed releases 
+  * Managed releases
 
 * **Enhancements to existing features**:
 
@@ -27,7 +27,7 @@ Given below are my contributions to the project.
   * Developer Guide:
 
 * **Community**:
-  * PRs reviewed (with non-trivial review comments): 
+  * PRs reviewed (with non-trivial review comments):
   * Contributed to forum discussions (examples: )
   * Reported bugs and suggestions for other teams in the class (examples: )
   * Some parts of the history feature I added was adopted by several other class mates ()

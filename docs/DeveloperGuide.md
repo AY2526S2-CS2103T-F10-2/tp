@@ -262,71 +262,138 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* CS2103T course coordinator who manages 500+ students and a tutor team
+* works mainly on a desktop workstation with a large monitor
+* is extremely time-pressured and prefers high-efficiency workflows
+* is a keyboard-first user who types very quickly
+* prefers batch operations over repetitive manual tasks
+* is comfortable using CLI-style tools, while appreciating a lightweight GUI for visibility
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: manage course logistics (students, tutors, groups) through fast, keyboard-driven commands
 
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
-| -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
-
-*{More to be added}*
+| Priority | As a …​                                    | I want to …​                     | So that …​                                                        |
+| -------- | --------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `* * *`  | new user              | access a command summary or help guide                     | recall the command syntax without leaving the app                      |
+| `* * *`  | course coordinator    | add a new student or tutor to the system                   | I can populate the course roster for the new semester                  |
+| `* * *`  | course coordinator    | view a list of all users                                   | I can get an overview of the entire cohort and staff                   |
+| `* * *`  | course coordinator    | delete a user from the system                              | students who drop the course do not clutter the database               |
+| `* *`    | course coordinator    | bulk import student data from external files (CSV/Excel)    | I don't have to manually type in 500 student records                   |
+| `* *`    | course coordinator    | manage over 500 student records                             | the system remains usable for the entire CS2103T cohort                |
+| `* *`    | course coordinator    | edit an existing user's details (address/contact/tag)       | the contact information and tagging remain accurate throughout the semester |
+| `* *`    | course coordinator    | filter for students who are not assigned to a group         | I can ensure no student is left behind before tutorials start          |
+| `* *`    | course coordinator    | assign students to specific tutorial groups                 | the teams are balanced and logistics are settled                       |
+| `* *`    | course coordinator    | create new tutor groups                                     | I can allocate resources for the incoming cohort                       |
+| `* *`    | course coordinator    | view a summary of a student's progress                      | I can identify who is falling behind                                   |
+| `* *`    | course coordinator    | automatically flag students who have late submissions        | I can apply penalties or offer assistance without manually checking timestamps |
+| `* *`    | course coordinator    | mask sensitive student data (like emails/phones)            | I can limit the amount of information shared to others (without violating privacy) |
+| `* *`    | course coordinator    | receive validation warnings when entering student data       | I do not accidentally save invalid email formats or duplicate IDs      |
+| `* *`    | course coordinator    | view and add course details                                  | all necessary administrative information is central to the system      |
+| `* *`    | course coordinator    | edit existing course details                                 | I can update website links or venue changes immediately                |
+| `* *`    | course coordinator    | delete a course or its specific details                      | I can remove obsolete data from previous years                         |
+| `* *`    | busy coordinator      | set system reminders for upcoming deadlines                  | I can send announcements to students on time                           |
+| `* *`    | course coordinator    | view the overall completion status of an assessment           | I know how much of the cohort has submitted their work                 |
+| `* *`    | power user            | create short aliases for long commands                        | I can execute complex tasks with just a few keystrokes                 |
+| `* *`    | fast typist           | utilize auto-completion for commands and names                | I can input data faster and reduce spelling errors                     |
+| `* *`    | course coordinator    | edit multiple records simultaneously (batch edit)             | I don't waste time making the same change to 50 different students one by one |
+| `* *`    | course coordinator    | view a log of recent data changes                             | I can track what modifications I or the tutors have made               |
+| `* *`    | course coordinator    | search for any name or course instantly                       | I can find specific records without scrolling through long lists       |
+| `* *`    | course coordinator    | sort lists by name or tag                                     | the data is presented in the most useful order for my current task     |
+| `* *`    | course coordinator    | see specific - actionable error messages                       | I can fix my input immediately without guessing what went wrong        |
+| `* *`    | course coordinator    | export the current roster                                     | I can upload the data to the official university grading system        |
+| `* *`    | course coordinator    | save the current state of the database to a specific file      | I have a portable copy of the data                                     |
+| `* *`    | course coordinator    | choose how to handle duplicate entries during import           | I can update existing records without creating clones                  |
+| `* *`    | course coordinator    | trigger emails to a filtered list of students                  | I can send targeted announcements quickly                              |
+| `* *`    | course coordinator    | access a command summary or help guide                         | I can refresh my memory on syntax without leaving the app              |
+| `* *`    | course coordinator    | access a settings menu                                         | I can configure the application behavior to my liking                  |
+| `* *`    | late-night user       | toggle between dark and light modes                            | I can reduce eye strain                                                |
+| `* *`    | course coordinator    | adjust the text size                                           | the interface remains readable on different monitors                   |
+| `* *`    | course coordinator    | experience instant feedback (<100ms) even under load           | my fast workflow is not interrupted by loading screens                 |
+| `*`      | course coordinator    | view a specific user's profile                                 | I can quickly access their contact details, SOC ID and GitHub ID when needed |
+| `*`      | course coordinator    | initialize a new course container                               | I can begin setting up a new iteration of CS2103T                      |
+| `*`      | course coordinator    | add new assessment items                                       | the grading structure is defined for the semester                      |
+| `*`      | course coordinator    | set deadlines for assessments                                  | the system can track lateness automatically                            |
+| `*`      | keyboard-first user   | use custom keybindings for common actions                      | I can navigate the app without slowing down to use the mouse           |
+| `*`      | fast working user     | undo my last command                                           | I can instantly rectify mistakes without re-entering data              |
+| `*`      | power user            | use SQL-like syntax to query the data                          | I can perform complex filtering operations that standard buttons don't support |
+| `*`      | course coordinator    | generate a formatted PDF/Text report                           | I can share course statistics with the faculty                         |
+| `*`      | course coordinator    | load data from a specific file                                 | I can switch between different semesters or backup versions            |
+| `*`      | course coordinator    | configure automatic backups                                    | I do not lose critical course data in the event of a crash             |
+| `*`      | course coordinator    | apply different visual themes                                  | the environment feels personalized and pleasant to use                 |
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+(For all use cases below, the **System** is the `Course Management System` and the **Actor** is the `course coordinator`, unless specified otherwise)
+
+**Use case: Assign a student to a tutorial group**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1.  Course coordinator requests to list students who are not assigned to any tutorial group
+2.  Course Management System shows the filtered list of unassigned students
+3.  Course coordinator selects a student and requests to assign the student to a specified tutorial group
+4.  Course Management System assigns the student
+
+      Use case ends.
+
+**Extensions**
+
+* 2a. There are no unassigned students.
+
+   Use case ends.
+
+* 3a. The specified tutorial group does not exist.
+
+   * 3a1. Course Management System shows an error message.
+   * 3a2. Course coordinator creates the tutorial group.
+   * 3a3. Course coordinator retries the assignment.
+
+      Use case resumes at step 3.
+
+**Use case: Import a student roster from CSV/Excel**
+
+**MSS**
+
+1.  Course coordinator requests to import roster data and provides a file path
+2.  Course Management System parses the file and validates the records
+3.  Course Management System shows a preview summary (e.g., number of records, warnings, duplicates)
+4.  Course Management System imports the records and shows a completion summary
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 2a. The file cannot be read (missing, corrupted, unsupported format).
 
-  Use case ends.
+   * 2a1. Course Management System shows an error message describing the issue.
 
-* 3a. The given index is invalid.
+      Use case ends.
 
-    * 3a1. AddressBook shows an error message.
+* 2b. Some records contain invalid data.
 
-      Use case resumes at step 2.
+   * 2b1. Course Management System shows validation warnings and which rows/fields are problematic.
+   * 2b2. Course coordinator fixes the source file and retries the import.
 
-*{More to be added}*
+      Use case resumes at step 1.
 
 ### Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+2.  Should be able to manage at least 500 student records (and associated tutors, groups, and courses) without a noticeable sluggishness in performance for typical usage.
+3.  For common operations (e.g., search, filter, list, assign, edit), the system should provide instant feedback (target: under 100ms) for a dataset size of 500 students.
+4.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+5.  Should provide clear, actionable validation and error messages that help users recover quickly.
 
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Tutorial group**: A tutor-led subgroup of students for administrative and teaching allocation purposes.
+* **Sensitive student data**: Private fields such as phone numbers that may need masking.
 
 --------------------------------------------------------------------------------------------------------------------
 

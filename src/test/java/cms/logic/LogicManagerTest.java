@@ -335,7 +335,7 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void execute_importCommandWithCurrentDataAndNoKeep_noDirectConflictsShowsPreviewNote() throws Exception {
+    public void execute_importNoKeepNoConflict_success() throws Exception {
         logic.execute(AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSMATRIC_DESC_AMY + ROLE_DESC_AMY
                 + SOCUSERNAME_DESC_AMY + GITHUBUSERNAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY);
@@ -352,9 +352,11 @@ public class LogicManagerTest {
         Path importPath = createImportFileWithSinglePerson(nonConflictingIncomingPerson);
         String importCommand = buildImportCommand(importPath.toAbsolutePath().normalize(), null);
 
-        CommandException thrownException = org.junit.jupiter.api.Assertions.assertThrows(
-                CommandException.class, () -> logic.execute(importCommand));
-        assertTrue(thrownException.getMessage().contains("No direct conflicts were detected in the import preview."));
+        CommandResult result = logic.execute(importCommand);
+        assertEquals(String.format(ImportCommand.MESSAGE_SUCCESS, importPath.toAbsolutePath().normalize()),
+            result.getFeedbackToUser());
+        assertEquals(2, model.getFilteredPersonList().size());
+        assertTrue(model.getFilteredPersonList().contains(nonConflictingIncomingPerson));
     }
 
     @Test

@@ -45,7 +45,7 @@ public class ImportCommand extends Command {
             "Import file contains invalid Course Management System data.";
     public static final String MESSAGE_STORAGE_CONTEXT_REQUIRED =
             "Import command requires storage context.";
-    public static final String MESSAGE_KEEP_REQUIRED_NON_EMPTY = "Current data is non-empty. "
+    public static final String MESSAGE_KEEP_REQUIRED_NON_EMPTY = "Conflicts were detected with current data. "
             + "Re-run the import command and add keep/current or keep/incoming "
             + "after the import command to choose how conflicts are resolved.";
     public static final String MESSAGE_NO_CONFLICT_PREVIEW =
@@ -105,9 +105,12 @@ public class ImportCommand extends Command {
         }
 
         boolean hasCurrentData = !model.getAddressBook().getPersonList().isEmpty();
+        String conflictPreviewMessage = MESSAGE_NO_CONFLICT_PREVIEW;
         if (hasCurrentData && keepPolicy == null) {
-            String conflictPreviewMessage = buildConflictPreviewMessage(model.getAddressBook(), importedAddressBook);
-            throw new CommandException(MESSAGE_KEEP_REQUIRED_NON_EMPTY + conflictPreviewMessage);
+            conflictPreviewMessage = buildConflictPreviewMessage(model.getAddressBook(), importedAddressBook);
+            if (!MESSAGE_NO_CONFLICT_PREVIEW.equals(conflictPreviewMessage)) {
+                throw new CommandException(MESSAGE_KEEP_REQUIRED_NON_EMPTY + conflictPreviewMessage);
+            }
         }
 
         if (!hasCurrentData) {
@@ -137,6 +140,9 @@ public class ImportCommand extends Command {
         model.setAddressBook(mergedAddressBook);
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
+        if (keepPolicy == null) {
+            return new CommandResult(String.format(MESSAGE_SUCCESS, importFilePath));
+        }
         if (keepPolicy == KeepPolicy.CURRENT) {
             return new CommandResult(String.format(MESSAGE_KEEP_CURRENT_SUCCESS, importFilePath));
         }

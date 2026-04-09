@@ -119,30 +119,6 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
-### Import feature
-
-The `import` feature is implemented by [`ImportCommandParser`](../src/main/java/cms/logic/parser/ImportCommandParser.java) and [`ImportCommand`](../src/main/java/cms/logic/commands/ImportCommand.java).
-
-`ImportCommandParser` requires the file path to be wrapped in double quotes and to end with `.json`. After validating the path, the parser extracts the optional keep policy token (`keep/current` or `keep/incoming`). If the current data is non-empty and no keep policy is provided, the command is rejected with usage guidance.
-
-During execution, `ImportCommand` delegates file reading and deserialization to the storage layer, then merges the imported records into the model using the chosen keep policy. Conflicts are resolved according to the selected policy, while invalid file paths, unsupported file extensions, invalid JSON content, and malformed records are reported as command errors.
-
-### Export feature
-
-The `export` feature is implemented by [`ExportCommandParser`](../src/main/java/cms/logic/parser/ExportCommandParser.java) and [`ExportCommand`](../src/main/java/cms/logic/commands/ExportCommand.java).
-
-`ExportCommandParser` also requires the file path to be wrapped in double quotes and to end with `.json`. Once validated, `ExportCommand` asks the storage layer to serialize the current model state and write it to the requested file path.
-
-Existing files are overwritten. Invalid file paths, unsupported file extensions, and write failures are reported as command errors.
-
-### Edit feature
-
-The `edit` feature is implemented by [`EditCommandParser`](../src/main/java/cms/logic/parser/EditCommandParser.java) and [`EditCommand`](../src/main/java/cms/logic/commands/EditCommand.java).
-
-`EditCommandParser` accepts either an index or a unique identifier for the target person. It then parses the supplied field updates, such as name, tutorial group, tags, email, or phone. If no target person or no editable fields are provided, the command is rejected.
-
-During execution, `EditCommand` applies the supplied changes to the target person and delegates validation to the model so that unique fields remain unique and field formats remain valid. The updated person replaces the old record in the model, so the UI reflects the new values immediately.
-
 ### Model component
 **API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-F10-2/tp/tree/master/src/main/java/cms/model/Model.java)
 
@@ -176,6 +152,30 @@ Classes used by multiple components are in the `cms.commons` package.
 ## **Implementation**
 
 This section describes the current CMS implementation at a high level. The command flow, component responsibilities, and diagrams above reflect the existing architecture and supported command-based workflow.
+
+### Import feature
+
+The `import` feature is implemented by [`ImportCommandParser`](../src/main/java/cms/logic/parser/ImportCommandParser.java) and [`ImportCommand`](../src/main/java/cms/logic/commands/ImportCommand.java).
+
+`ImportCommandParser` requires the file path to be wrapped in double quotes and to end with `.json`. After validating the path, the parser extracts the optional keep policy token (`keep/current` or `keep/incoming`). If the current data is non-empty and no keep policy is provided, the command is rejected with usage guidance.
+
+During execution, `ImportCommand` delegates file reading and deserialization to the storage layer, then merges the imported records into the model using the chosen keep policy. Conflicts are resolved according to the selected policy, while invalid file paths, unsupported file extensions, invalid JSON content, and malformed records are reported as command errors.
+
+### Export feature
+
+The `export` feature is implemented by [`ExportCommandParser`](../src/main/java/cms/logic/parser/ExportCommandParser.java) and [`ExportCommand`](../src/main/java/cms/logic/commands/ExportCommand.java).
+
+`ExportCommandParser` also requires the file path to be wrapped in double quotes and to end with `.json`. Once validated, `ExportCommand` asks the storage layer to serialize the current model state and write it to the requested file path.
+
+Existing files are overwritten. Invalid file paths, unsupported file extensions, and write failures are reported as command errors.
+
+### Edit feature
+
+The `edit` feature is implemented by [`EditCommandParser`](../src/main/java/cms/logic/parser/EditCommandParser.java) and [`EditCommand`](../src/main/java/cms/logic/commands/EditCommand.java).
+
+`EditCommandParser` accepts either an index or a unique identifier for the target person. It then parses the supplied field updates, such as name, tutorial group, tags, email, or phone. If no target person or no editable fields are provided, the command is rejected.
+
+During execution, `EditCommand` applies the supplied changes to the target person and delegates validation to the model so that unique fields remain unique and field formats remain valid. The updated person replaces the old record in the model, so the UI reflects the new values immediately.
 
 --------------------------------------------------------------------------------------------------------------------
 

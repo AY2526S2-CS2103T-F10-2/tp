@@ -119,6 +119,30 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+### Import feature
+
+The `import` feature is implemented by [`ImportCommandParser`](../src/main/java/cms/logic/parser/ImportCommandParser.java) and [`ImportCommand`](../src/main/java/cms/logic/commands/ImportCommand.java).
+
+`ImportCommandParser` requires the file path to be wrapped in double quotes and to end with `.json`. After validating the path, the parser extracts the optional keep policy token (`keep/current` or `keep/incoming`). If the current data is non-empty and no keep policy is provided, the command is rejected with usage guidance.
+
+During execution, `ImportCommand` delegates file reading and deserialization to the storage layer, then merges the imported records into the model using the chosen keep policy. Conflicts are resolved according to the selected policy, while invalid file paths, unsupported file extensions, invalid JSON content, and malformed records are reported as command errors.
+
+### Export feature
+
+The `export` feature is implemented by [`ExportCommandParser`](../src/main/java/cms/logic/parser/ExportCommandParser.java) and [`ExportCommand`](../src/main/java/cms/logic/commands/ExportCommand.java).
+
+`ExportCommandParser` also requires the file path to be wrapped in double quotes and to end with `.json`. Once validated, `ExportCommand` asks the storage layer to serialize the current model state and write it to the requested file path.
+
+Existing files are overwritten. Invalid file paths, unsupported file extensions, and write failures are reported as command errors.
+
+### Edit feature
+
+The `edit` feature is implemented by [`EditCommandParser`](../src/main/java/cms/logic/parser/EditCommandParser.java) and [`EditCommand`](../src/main/java/cms/logic/commands/EditCommand.java).
+
+`EditCommandParser` accepts either an index or a unique identifier for the target person. It then parses the supplied field updates, such as name, tutorial group, tags, email, or phone. If no target person or no editable fields are provided, the command is rejected.
+
+During execution, `EditCommand` applies the supplied changes to the target person and delegates validation to the model so that unique fields remain unique and field formats remain valid. The updated person replaces the old record in the model, so the UI reflects the new values immediately.
+
 ### Model component
 **API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-F10-2/tp/tree/master/src/main/java/cms/model/Model.java)
 
@@ -422,24 +446,43 @@ testers are expected to do more *exploratory* testing.
 
 1. Export current data
 
-   1. Test case: `export data/manual-test-export.json`<br>
+   1. Test case: `export "data/manual-test-export.json"`<br>
       Expected: Command succeeds and creates/overwrites `data/manual-test-export.json`.
 
-   1. Incorrect command to try: `export data/manual-test-export.txt`<br>
+   1. Incorrect command to try: `export "data/manual-test-export.txt"`<br>
       Expected: Command is rejected because file path must end with `.json`.
 
 1. Import data with and without keep policy
 
    1. Prerequisites: Use the exported file from the previous test.
 
-   1. Test case: `import data/manual-test-export.json` (when current data is non-empty)<br>
+   1. Test case: `import "data/manual-test-export.json"` (when current data is non-empty)<br>
       Expected: Command is rejected and asks for `keep/current` or `keep/incoming`.
 
-   1. Test case: `import data/manual-test-export.json keep/current`<br>
+   1. Test case: `import "data/manual-test-export.json" keep/current`<br>
       Expected: Command succeeds and keeps existing records where conflicts occur.
 
-   1. Test case: `import data/manual-test-export.json keep/incoming`<br>
+   1. Test case: `import "data/manual-test-export.json" keep/incoming`<br>
       Expected: Command succeeds and incoming records replace existing conflicting records.
 
-   1. Incorrect command to try: `import data/manual-test-export.txt`<br>
+   1. Incorrect command to try: `import "data/manual-test-export.txt"`<br>
       Expected: Command is rejected because file path must end with `.json`.
+
+1. Editing a person
+
+   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+   1. Test case: `edit 1 n/John New e/john.new@example.com`<br>
+      Expected: The first person's name and email are updated.
+
+   1. Test case: `edit m/A0123456J tg/T02`<br>
+      Expected: The person with NUS Matric `A0123456J` has their tutorial group updated to `T02`.
+
+   1. Test case: `edit soc/johnd tag/mentor tag/important`<br>
+      Expected: The person with SoC username `johnd` has their tags updated.
+
+   1. Incorrect command to try: `edit`<br>
+      Expected: Command is rejected because no target person or fields are provided.
+
+   1. Incorrect command to try: `edit 1`<br>
+      Expected: Command is rejected because at least one field must be specified.

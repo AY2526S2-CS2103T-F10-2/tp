@@ -37,14 +37,8 @@ public class ExportCommandParserTest {
 
     @Test
     public void parse_tooManyArguments_failure() {
-        try {
-            parser.parse("\"data/export.json\" \"extra.json\"");
-        } catch (ParseException pe) {
-            assertTrue(pe.getMessage().contains("File path is invalid:"));
-            return;
-        }
-
-        throw new AssertionError("The expected ParseException was not thrown.");
+        assertParseFailure(parser, "\"data/export.json\" \"extra.json\"",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE));
     }
 
     @Test

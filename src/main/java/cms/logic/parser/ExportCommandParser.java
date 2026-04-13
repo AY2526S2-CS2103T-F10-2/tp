@@ -15,19 +15,20 @@ public class ExportCommandParser implements Parser<ExportCommand> {
 
     public static final String MESSAGE_INVALID_FILE_PATH = "File path is invalid: %1$s\n"
         + "Format: " + ExportCommand.MESSAGE_USAGE;
+    public static final String MESSAGE_EMPTY_FILE_PATH = "File path cannot be empty\n"
+        + "Format: " + ExportCommand.MESSAGE_USAGE;
     public static final String MESSAGE_FILE_EXTENSION_REQUIRED = "File path must end with .json\n"
         + "Format: " + ExportCommand.MESSAGE_USAGE;
 
     @Override
     public ExportCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
-        if (trimmedArgs.isEmpty()) {
+        String pathString = extractQuotedPath(args.trim());
+        if (pathString == null) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE));
         }
 
-        String pathString = extractQuotedPath(trimmedArgs);
-        if (pathString == null) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE));
+        if (pathString.isEmpty()) {
+            throw new ParseException(MESSAGE_EMPTY_FILE_PATH);
         }
 
         final Path exportFilePath;
@@ -48,16 +49,12 @@ public class ExportCommandParser implements Parser<ExportCommand> {
         boolean startsWithQuote = input.startsWith("\"");
         boolean endsWithQuote = input.endsWith("\"");
 
-        if (startsWithQuote && endsWithQuote && input.length() == 1) {
-            return null;
+        if (startsWithQuote && endsWithQuote && input.length() > 1) {
+            return input.substring(1, input.length() - 1);
         }
 
         if (startsWithQuote != endsWithQuote) {
             return null;
-        }
-
-        if (startsWithQuote) {
-            return input.substring(1, input.length() - 1);
         }
 
         return null;

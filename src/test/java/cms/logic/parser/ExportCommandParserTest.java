@@ -36,6 +36,23 @@ public class ExportCommandParserTest {
     }
 
     @Test
+    public void parse_tooManyArguments_failure() {
+        try {
+            parser.parse("\"data/export.json\" \"extra.json\"");
+        } catch (ParseException pe) {
+            assertTrue(pe.getMessage().contains("File path is invalid:"));
+            return;
+        }
+
+        throw new AssertionError("The expected ParseException was not thrown.");
+    }
+
+    @Test
+    public void parse_emptyQuotedPath_failure() {
+        assertParseFailure(parser, "\"\"", ExportCommandParser.MESSAGE_EMPTY_FILE_PATH);
+    }
+
+    @Test
     public void parse_missingPath_failure() {
         assertParseFailure(parser, "   ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE));
     }
